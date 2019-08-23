@@ -85,23 +85,34 @@ class BottomControlsState extends State<BottomControls> {
     );
   }
 
-  void playNextTrack() async{
-    if (musicplayer.currTrack != musicplayer.allFilePaths.length - 1) {
-     
-                                      musicplayer.action=true;
-        await musicplayer.stop();        
-        musicplayer.currTrack = musicplayer.currTrack + 1;
-        await musicplayer.play(musicplayer.allFilePaths[musicplayer.currTrack]);
-
-                                      musicplayer.action=false;
+  void playNextTrack() async {
+    if (musicplayer.shuffle) {
+      print("random");
+      musicplayer.action = false;
+      await musicplayer.stop();
       setState(() {
-
         musicplayer.playerState = musicplayer.PlayerState.playing;
         musicplayer.currTrackName =
             musicplayer.allFilePaths[musicplayer.currTrack];
 
         widget.parentAction();
       });
+    } else {
+      if (musicplayer.currTrack != musicplayer.allFilePaths.length - 1) {
+        musicplayer.action = true;
+        await musicplayer.stop();
+        musicplayer.currTrack = musicplayer.currTrack + 1;
+        await musicplayer.play(musicplayer.allFilePaths[musicplayer.currTrack]);
+
+        musicplayer.action = false;
+        setState(() {
+          musicplayer.playerState = musicplayer.PlayerState.playing;
+          musicplayer.currTrackName =
+              musicplayer.allFilePaths[musicplayer.currTrack];
+
+          widget.parentAction();
+        });
+      }
     }
   }
 
@@ -146,8 +157,8 @@ class BottomControlsState extends State<BottomControls> {
       musicplayer.playerState = musicplayer.PlayerState.playing;
       musicplayer.currTrackName =
           musicplayer.allFilePaths[musicplayer.currTrack];
-          
-        widget.parentAction();
+
+      widget.parentAction();
     });
   }
 
@@ -155,8 +166,8 @@ class BottomControlsState extends State<BottomControls> {
     musicplayer.pause();
     setState(() {
       musicplayer.playerState = musicplayer.PlayerState.paused;
-      
-        widget.parentAction();
+
+      widget.parentAction();
     });
   }
 
@@ -173,26 +184,35 @@ class BottomControlsState extends State<BottomControls> {
     );
   }
 
-  void playPreviousTrack() async{
-   
-    if (musicplayer.currTrack != 0) {
-      
-       
-                                      musicplayer.action=true;
-       await musicplayer.stop();
-         musicplayer.currTrack = musicplayer.currTrack - 1;
-    
-       await musicplayer.play(musicplayer.allFilePaths[musicplayer.currTrack]);
-       
-                                      musicplayer.action=false;
+  void playPreviousTrack() async {
+    if (musicplayer.shuffle) {
+      print("random");
+      musicplayer.action = false;
+      await musicplayer.stop();
       setState(() {
-
         musicplayer.playerState = musicplayer.PlayerState.playing;
         musicplayer.currTrackName =
             musicplayer.allFilePaths[musicplayer.currTrack];
-            
+
         widget.parentAction();
       });
+    } else {
+      if (musicplayer.currTrack != 0) {
+        musicplayer.action = true;
+        await musicplayer.stop();
+        musicplayer.currTrack = musicplayer.currTrack - 1;
+
+        await musicplayer.play(musicplayer.allFilePaths[musicplayer.currTrack]);
+
+        musicplayer.action = false;
+        setState(() {
+          musicplayer.playerState = musicplayer.PlayerState.playing;
+          musicplayer.currTrackName =
+              musicplayer.allFilePaths[musicplayer.currTrack];
+
+          widget.parentAction();
+        });
+      }
     }
   }
 }

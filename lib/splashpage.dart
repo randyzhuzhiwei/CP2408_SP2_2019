@@ -90,38 +90,7 @@ class SplashScreenState extends State<SplashScreen> {
     musicplayer.appPath = path;
     await getFiles();
     await _getAllMetaData();
-    /* 
-    for (var i = 0; i < _musicFiles.length; i++) {
-      if (_metaData[i][0] == null) {
-        String s = _musicFiles[i];
-        for (var n = s.length; n > 0; n--) {
-          if (s.substring(n - 2, n - 1) == "/") {
-            _metaData[i][0] = s.substring(n-1, s.length - 4);
-            break;
-          }
-        }
-        if (_metaData[i][1] == null) {
-          _metaData[i][1] = "Unknown Artist";
-        }
-        if (_metaData[i][3] == null) {
-          _metaData[i][3] = "Unknown Album";
-        }
-      }
-      if (_metaData[i][4] != null) {
-        Iterable<Match> matches = exp.allMatches(_metaData[i][4]);
-        for (Match match in matches) {
-          _metaData[i][4] = match.group(0);
-        }
-      } else {
-        _metaData[i][4] = "0";
-      }
-    }
-
-    for (var i = 0; i < _musicFiles.length; i++) {
-      mapMetaData[_musicFiles[i]] = _metaData[i];
-    }
-    writeStoredMetaData(mapMetaData);
-    */
+    
     musicplayer.allMetaData = _metaData;
 
     musicplayer.allFilePaths = _musicFiles;
@@ -139,7 +108,7 @@ class SplashScreenState extends State<SplashScreen> {
         var mainDir = Directory(extDir2.path);
         List contents = mainDir.listSync(recursive: true);
         for (var fileOrDir in contents) {
-          if (fileOrDir.path.toString().endsWith(".mp3")) {
+          if (fileOrDir.path.toString().endsWith(".mp3")||fileOrDir.path.toString().endsWith(".m4a")) {
             _musicFiles.add(fileOrDir.path);
           }
         } // tries to find external sd card
@@ -169,28 +138,7 @@ class SplashScreenState extends State<SplashScreen> {
       }
     }
   }
-/*
-  Future _getFileMetaData(track) async {
-    var value;
-    TagProcessor tp = new TagProcessor();
-
-    File f = new File(track);
-
-     Map<String,dynamic> m =new Map<String,dynamic>();
-     value=m;
-    await tp.getTagsFromByteArray(f.readAsBytes()).then((l) => l.forEach((f) {
-
-print(f);
-          if (f.version == "2.3.0") {
-                //  print(f);
-            value = f.tags;
-          }
-        }));
-    
-    
-     return value;
-  }
-*/
+  
 
   Future _getFileMetaData(track) async {
     var value;
@@ -218,7 +166,7 @@ print(f);
     Stream sdContents = extSdDir.list(recursive: true);
     sdContents = sdContents.handleError((data) {});
     await for (var data in sdContents) {
-      if (data.path.endsWith(".mp3")) {
+      if (data.path.endsWith(".mp3")||data.path.endsWith(".m4a")) {
         _musicFiles.add(data.path);
       }
     }

@@ -35,6 +35,7 @@ class HomePageState extends State<HomePage> {
         setState(() {
           musicplayer.position = musicplayer.duration;
           if (musicplayer.shuffle) {
+            print("random");
             musicplayer.stop();
             Random _random = new Random();
             int r = _random.nextInt(musicplayer.allFilePaths.length);
@@ -203,10 +204,12 @@ class HomePageState extends State<HomePage> {
                                 ));
                           })
                       : ListView.builder(
+                        padding: EdgeInsets.symmetric(vertical: 16.0),
                           scrollDirection: Axis.horizontal,
                           itemCount: musicplayer.allFilePaths.length,
                           itemBuilder: (context, index) {
                             String basename = musicplayer.getBaseName(index);
+                            
                             return Container(
                               width: MediaQuery.of(context).size.width,
                               child: Card(
@@ -269,7 +272,7 @@ class HomePageState extends State<HomePage> {
                                           child: musicplayer.allMetaData[index]
                                                       [2] ==
                                                   null
-                                              ? Icon(Icons.music_note,size:300.0)
+                                              ? Icon(Icons.music_note,size:300.0,color: Colors.white,)
                                               : musicplayer.getImage(
                                                   musicplayer.allMetaData[index]
                                                       [2],
@@ -327,11 +330,7 @@ class HomePageState extends State<HomePage> {
                             setState(() {
                               view = ControlState.list;
                             });
-                            /* Navigator.of(context).push(MaterialPageRoute(
-                              builder: (BuildContext context) => Library(
-                                musicFiles: musicplayer.allFilePaths,
-                              ),
-                            ));*/
+                         
                           },
                         ),
                       ),
@@ -366,8 +365,7 @@ class HomePageState extends State<HomePage> {
                             setState(() {
                               view = ControlState.cover;
                             });
-                            // Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) => FavouritesPage(),));
-                          },
+                            },
                         ),
                       ),
                     ),

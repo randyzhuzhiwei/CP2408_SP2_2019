@@ -28,7 +28,6 @@ class PlayPageState extends State<PlayPage> with TickerProviderStateMixin {
 
   void initState() {
     super.initState();
-    // data = _generateRandomData();
     animationController = new AnimationController(
         vsync: this, duration: new Duration(seconds: 2));
 
@@ -53,45 +52,20 @@ class PlayPageState extends State<PlayPage> with TickerProviderStateMixin {
               musicplayer.position = p;
             }));
 
-            
+    if (musicplayer.playerState == musicplayer.PlayerState.playing) {
+      animationController.repeat();
+    }
     _audioPlayerStateSubscription =
         musicplayer.audioPlayer.onPlayerStateChanged.listen((s) {
-          
       if (s == AudioPlayerState.PLAYING) {
-        print("test");
         setState(() {
-          animationController.forward();
+          animationController.repeat();
           musicplayer.duration = musicplayer.audioPlayer.duration;
         });
       } else if (s == AudioPlayerState.STOPPED) {
         setState(() {
           animationController.reset();
         });
-        /*
-        setState(() {musicplayer.position = musicplayer.duration;
-          if (musicplayer.shuffle) {
-            musicplayer.stop();
-            Random _random = new Random();
-            int r = _random.nextInt(musicplayer.allFilePaths.length);
-  
-            musicplayer.currTrack = r;
-            musicplayer.play(musicplayer.allFilePaths[musicplayer.currTrack]);
-
-            musicplayer.playerState = musicplayer.PlayerState.playing;
-            musicplayer.currTrackName =
-                musicplayer.allFilePaths[musicplayer.currTrack];
-          } else {
-            if (musicplayer.currTrack != musicplayer.allFilePaths.length - 1) {
-              musicplayer.stop();
-              musicplayer.currTrack = musicplayer.currTrack + 1;
-              musicplayer.play(musicplayer.allFilePaths[musicplayer.currTrack]);
-
-              musicplayer.playerState = musicplayer.PlayerState.playing;
-              musicplayer.currTrackName =
-                  musicplayer.allFilePaths[musicplayer.currTrack];
-            }
-          }
-        });*/
       }
     }, onError: (msg) {
       setState(() {
@@ -102,21 +76,6 @@ class PlayPageState extends State<PlayPage> with TickerProviderStateMixin {
     });
   }
 
-  /*
-List<CircularStackEntry> _generateRandomData() {
-    int stackCount = random.nextInt(10);
-    List<CircularStackEntry> data = new List.generate(stackCount, (i) {
-      int segCount = random.nextInt(10);
-      List<CircularSegmentEntry> segments =  new List.generate(segCount, (j) {
-        Color randomColor = ColorPalette.primary.random(random);
-        return new CircularSegmentEntry(random.nextDouble(), randomColor);
-      });
-      return new CircularStackEntry(segments);
-    });
-
-    return data;
-  }
-  */
   List<double> _generateRandomData(int count) {
     List<double> result = <double>[];
     for (int i = 0; i < count; i++) {
@@ -139,14 +98,6 @@ List<CircularStackEntry> _generateRandomData() {
     List<String> musicList;
     musicList = new List<String>();
     var data = _generateRandomData(50);
-/*
-Timer.periodic(Duration(seconds: 2), (timer) {
-  setState(() {
-    
-  data = _generateRandomData(50);
-  });
-});
-*/
     musicplayer.allFilePaths.forEach((f) {
       musicList.add(f.toString());
     });
@@ -213,7 +164,6 @@ Timer.periodic(Duration(seconds: 2), (timer) {
           musicplayer.playerState == musicplayer.PlayerState.stopped)
         animationController.reset();
     });
-    
   }
 }
 
@@ -325,7 +275,6 @@ class RadialSeekBarState extends State<RadialSeekBar> {
     }
 
     setState(() {
-      
       _currentDragPercent = null;
       _startDragCoord = null;
       _startDragPercent = 0.0;
@@ -337,8 +286,7 @@ class RadialSeekBarState extends State<RadialSeekBar> {
     double thumbPosition = _progress;
     if (_currentDragPercent != null) {
       thumbPosition = _currentDragPercent;
-    } 
-    
+    }
 
     return new RadialDragGestureDetector(
       onRadialDragStart: _onDragStart,
