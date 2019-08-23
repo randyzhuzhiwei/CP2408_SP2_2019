@@ -52,11 +52,15 @@ class PlayPageState extends State<PlayPage> with TickerProviderStateMixin {
         .listen((p) => setState(() {
               musicplayer.position = p;
             }));
+
+            
     _audioPlayerStateSubscription =
         musicplayer.audioPlayer.onPlayerStateChanged.listen((s) {
+          
       if (s == AudioPlayerState.PLAYING) {
+        print("test");
         setState(() {
-          animationController.repeat();
+          animationController.forward();
           musicplayer.duration = musicplayer.audioPlayer.duration;
         });
       } else if (s == AudioPlayerState.STOPPED) {
@@ -209,6 +213,7 @@ Timer.periodic(Duration(seconds: 2), (timer) {
           musicplayer.playerState == musicplayer.PlayerState.stopped)
         animationController.reset();
     });
+    
   }
 }
 

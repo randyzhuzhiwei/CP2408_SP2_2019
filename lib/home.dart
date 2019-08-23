@@ -31,7 +31,7 @@ class HomePageState extends State<HomePage> {
         musicplayer.audioPlayer.onPlayerStateChanged.listen((s) {
       if (s == AudioPlayerState.PLAYING) {
         setState(() => musicplayer.duration = musicplayer.audioPlayer.duration);
-      } else if (s == AudioPlayerState.STOPPED) {
+      } else if (s == AudioPlayerState.STOPPED && musicplayer.action==false) {
         setState(() {
           musicplayer.position = musicplayer.duration;
           if (musicplayer.shuffle) {
@@ -162,12 +162,12 @@ class HomePageState extends State<HomePage> {
                                         color: Colors.white),
                                   ),
                                   title: Text(basename),
-                                  onTap: () {
+                                  onTap: () async {
                                     if (musicplayer.currTrackName ==
                                         musicplayer.allFilePaths[index]) {
                                       if (musicplayer.playerState !=
                                           musicplayer.PlayerState.playing) {
-                                        musicplayer.play(
+                                        await musicplayer.play(
                                             musicplayer.allFilePaths[index]);
                                         musicplayer.currTrackName =
                                             musicplayer.allFilePaths[index];
@@ -176,16 +176,19 @@ class HomePageState extends State<HomePage> {
                                               musicplayer.PlayerState.playing;
                                         });
                                       } else {
-                                        musicplayer.pause();
+                                        await musicplayer.pause();
                                         setState(() {
                                           musicplayer.playerState =
                                               musicplayer.PlayerState.paused;
                                         });
                                       }
                                     } else {
-                                      musicplayer.stop();
-                                      musicplayer.play(
+                                      musicplayer.action=true;
+                                      await musicplayer.stop();
+                                      await musicplayer.play(
                                           musicplayer.allFilePaths[index]);
+                                          
+                                      musicplayer.action=false;
                                       musicplayer.currTrackName =
                                           musicplayer.allFilePaths[index];
                                       setState(() {
@@ -195,6 +198,7 @@ class HomePageState extends State<HomePage> {
                                     }
 
                                     musicplayer.currTrack = index;
+                                    print( musicplayer.currTrack);
                                   },
                                 ));
                           })
@@ -240,9 +244,13 @@ class HomePageState extends State<HomePage> {
                                             });
                                           }
                                         } else {
+                                          
+                                      musicplayer.action=true;
                                           musicplayer.stop();
                                           musicplayer.play(
                                               musicplayer.allFilePaths[index]);
+                                              
+                                      musicplayer.action=false;
                                           musicplayer.currTrackName =
                                               musicplayer.allFilePaths[index];
                                           setState(() {

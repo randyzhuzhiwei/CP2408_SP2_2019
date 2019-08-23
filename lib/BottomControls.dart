@@ -85,12 +85,16 @@ class BottomControlsState extends State<BottomControls> {
     );
   }
 
-  void playNextTrack() {
+  void playNextTrack() async{
     if (musicplayer.currTrack != musicplayer.allFilePaths.length - 1) {
-      setState(() {
-        musicplayer.stop();
+     
+                                      musicplayer.action=true;
+        await musicplayer.stop();        
         musicplayer.currTrack = musicplayer.currTrack + 1;
-        musicplayer.play(musicplayer.allFilePaths[musicplayer.currTrack]);
+        await musicplayer.play(musicplayer.allFilePaths[musicplayer.currTrack]);
+
+                                      musicplayer.action=false;
+      setState(() {
 
         musicplayer.playerState = musicplayer.PlayerState.playing;
         musicplayer.currTrackName =
@@ -169,12 +173,19 @@ class BottomControlsState extends State<BottomControls> {
     );
   }
 
-  void playPreviousTrack() {
+  void playPreviousTrack() async{
+   
     if (musicplayer.currTrack != 0) {
+      
+       
+                                      musicplayer.action=true;
+       await musicplayer.stop();
+         musicplayer.currTrack = musicplayer.currTrack - 1;
+    
+       await musicplayer.play(musicplayer.allFilePaths[musicplayer.currTrack]);
+       
+                                      musicplayer.action=false;
       setState(() {
-        musicplayer.stop();
-        musicplayer.currTrack = musicplayer.currTrack - 1;
-        musicplayer.play(musicplayer.allFilePaths[musicplayer.currTrack]);
 
         musicplayer.playerState = musicplayer.PlayerState.playing;
         musicplayer.currTrackName =

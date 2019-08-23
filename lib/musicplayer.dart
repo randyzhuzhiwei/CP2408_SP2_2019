@@ -27,6 +27,7 @@ String appPath;
 bool onPlayingPage = false;
 bool darkMode=false;
 bool shuffle=false;
+bool action=false;
 
 enum PlayerState { stopped, playing, paused }
 AudioPlayer audioPlayer;
